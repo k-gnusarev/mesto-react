@@ -1,9 +1,9 @@
 import logo from './logo.svg';
-import './App.css';
+import './pages/index.css';
 
 function App() {
   return (
-    <div className="App">
+    <div className="page">
       <header className="header">
         <img src="<%=require('./images/logo.svg')%>" className="logo" alt="Логотип Mesto Russia" />
       </header>
