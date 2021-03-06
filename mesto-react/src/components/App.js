@@ -1,97 +1,77 @@
 import '../pages/index.css';
+import React, { useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
-import Footer from './Footer'
+import Footer from './Footer';
+import UpdateAvatarPopup from './UpdateAvatarPopup';
+import EditProfilePopup from './EditProfilePopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
+  // УПРАВЛЕНИЕ ПОПАПАМИ
+  const [isUpdateAvatarActive, setUpdateAvatarActive] = React.useState(false);
+  const [isEditProfileActive, setEditProfileActive] = React.useState(false);
+  const [isAddPlaceActive, setAddPlaceActive] = React.useState(false);
+
+  // Открытие попапов
+  const handleUpdateAvatarClick = () => {
+    setUpdateAvatarActive(true);
+  };
+
+  const handleEditProfileClick = () => {
+    setEditProfileActive(true);
+  };
+
+  const handleAddPlaceClick = () => {
+    setAddPlaceActive(true);
+  };
+  // TODO: попап подтверждения удаления
+
+  // Закрытие попапов
+
+  function closePopups() {
+    setUpdateAvatarActive(false);
+    setEditProfileActive(false);
+    setAddPlaceActive(false);
+  }
+
+  // --Закрытие по Esc
+
+  useEffect(() => {
+    function handleEscClose(evt) {
+      if (evt.key === 'Escape') {
+        closePopups();
+      }
+    }
+
+    document.addEventListener('keydown', handleEscClose);
+    return () => {
+      document.removeEventListener('keydown', handleEscClose);
+    }
+  },
+  [])
+
   return (
     <div className="page">
       <Header />
-      <Main />
+      <Main
+        onUpdateAvatar={handleUpdateAvatarClick}
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+      />
       <Footer />
-      <div className="popup popup_type_edit">
-        <div className="popup__container">
-          <button type="button" className="button popup__close-button"></button>
-          <h3 className="popup__title">Редактировать профиль</h3>
-          <form name="edit-profile" className="popup__form" novalidate>
-            <section className="popup__section">
-              <input
-                type="text"
-                name="title"
-                className="popup__input"
-                id="edit-title"
-                placeholder="Имя профиля"
-                required
-                minlength="2"
-                maxlength="40" />
-              <span className="popup__form-error" id="edit-title-error"></span>
-            </section>
-            <section className="popup__section">
-              <input
-                type="text"
-                name="subtitle"
-                className="popup__input"
-                id="edit-subtitle"
-                placeholder="Описание профиля"
-                required
-                minlength="2"
-                maxlength="200" />
-              <span className="popup__form-error" id="edit-subtitle-error"></span>
-            </section>
-            <button type="submit" className="button popup__submit-button">Сохранить</button>
-          </form>
-        </div>
-      </div>
-      <div className="popup popup_type_add">
-        <div className="popup__container">
-          <button type="button" className="button popup__close-button"></button>
-          <h3 className="popup__title">Новое место</h3>
-          <form name="add-place" className="popup__form popup__form_type_add" novalidate>
-            <section className="popup__section">
-              <input
-                type="text"
-                name="placeName"
-                className="popup__input"
-                id="add-name"
-                placeholder="Название"
-                required
-                minlength="2"
-                maxlength="30" />
-            <span className="popup__form-error" id="add-name-error"></span>
-            </section>
-            <section className="popup__section">
-              <input
-                type="url"
-                name="placeLink"
-                className="popup__input"
-                id="add-url"
-                placeholder="Ссылка на картинку"
-                required />
-              <span className="popup__form-error" id="add-url-error"></span>
-            </section>        
-            <button type="submit" className="button popup__submit-button">Сохранить</button>
-          </form>
-        </div>
-      </div>
-      <div className="popup popup_type_update-avatar">
-        <div className="popup__container">
-          <button type="button" className="button popup__close-button"></button>
-          <h3 className="popup__title">Обновить аватар</h3>
-          <form name="update-avatar" className="popup__form popup__form_type_update-avatar" novalidate>
-            <section className="popup__section">
-              <input
-                type="url"
-                name="avatarLink"
-                className="popup__input"
-                id="avatar-url"
-                placeholder="Ссылка на аватар"
-                required />
-              <span className="popup__form-error" id="avatar-url-error"></span>
-            </section>        
-            <button type="submit" className="button popup__submit-button">Сохранить</button>
-          </form>
-        </div>
-      </div>
+      <EditProfilePopup
+        isActive={isEditProfileActive}
+        onClose={closePopups}
+      />
+      <AddPlacePopup
+        isActive={isAddPlaceActive}
+        onClose={closePopups}
+      />
+      <UpdateAvatarPopup
+        isActive={isUpdateAvatarActive}
+        onClose={closePopups}
+      />
       <div className="popup popup_type_viewer">
         <div className="popup__photo-container">
           <button type="button" className="button popup__close-button"></button>
@@ -103,7 +83,7 @@ function App() {
         <div className="popup__container">
           <button type="button" className="button popup__close-button"></button>
           <h3 className="popup__title">Вы уверены?</h3>
-          <form name="confirm-delete" className="popup__form" novalidate>
+          <form name="confirm-delete" className="popup__form" noValidate>
             <button type="submit" className="button popup__submit-button">Да</button>
           </form>      
         </div>
