@@ -1,12 +1,9 @@
-import '../pages/index.css';
+import '../index.css';
 import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import UpdateAvatarPopup from './UpdateAvatarPopup';
-import EditProfilePopup from './EditProfilePopup';
-import AddPlacePopup from './AddPlacePopup';
-import ConfirmDeletePopup from './ConfirmDeletePopup';
+import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 
 function App() {
@@ -14,7 +11,6 @@ function App() {
   const [isUpdateAvatarActive, setUpdateAvatarActive] = React.useState(false);
   const [isEditProfileActive, setEditProfileActive] = React.useState(false);
   const [isAddPlaceActive, setAddPlaceActive] = React.useState(false);
-  const [isImagePopupActive, setImagePopupActive] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
 
   // Открытие попапов
@@ -31,7 +27,6 @@ function App() {
   };
 
   function handleCardClick(card) {
-    setImagePopupActive(true);
     setSelectedCard(card);
   }
 
@@ -41,7 +36,6 @@ function App() {
     setUpdateAvatarActive(false);
     setEditProfileActive(false);
     setAddPlaceActive(false);
-    setImagePopupActive(false);
     setSelectedCard(null);
   }
 
@@ -71,23 +65,100 @@ function App() {
         onCardClick={handleCardClick}
       />
       <Footer />
-      <EditProfilePopup
+      <PopupWithForm
         isActive={isEditProfileActive}
         onClose={closePopups}
-      />
-      <AddPlacePopup
+        title="Редактировать профиль"
+        name="edit"
+        buttonCaption="Сохранить"
+      >
+        <section className="popup__section">
+          <input
+            type="text"
+            name="title"
+            className="popup__input"
+            id="edit-title"
+            placeholder="Имя профиля"
+            required
+            minLength="2"
+            maxLength="40" />
+          <span className="popup__form-error" id="edit-title-error"></span>
+        </section>
+
+        <section className="popup__section">
+          <input
+            type="text"
+            name="subtitle"
+            className="popup__input"
+            id="edit-subtitle"
+            placeholder="Описание профиля"
+            required
+            minLength="2"
+            maxLength="200" />
+
+          <span className="popup__form-error" id="edit-subtitle-error"></span>
+        </section>
+      </PopupWithForm>
+
+      <PopupWithForm
         isActive={isAddPlaceActive}
         onClose={closePopups}
-      />
-      <UpdateAvatarPopup
+        title="Добавить место"
+        name="add"
+        buttonCaption="Сохранить">
+        <section className="popup__section">
+          <input
+            type="text"
+            name="placeName"
+            className="popup__input"
+            id="add-name"
+            placeholder="Название"
+            required
+            minLength="2"
+            maxLength="30" />
+          <span className="popup__form-error" id="add-name-error"></span>
+        </section>
+
+        <section className="popup__section">
+          <input
+            type="url"
+            name="placeLink"
+            className="popup__input"
+            id="add-url"
+            placeholder="Ссылка на картинку"
+            required />
+          <span className="popup__form-error" id="add-url-error"></span>
+        </section>
+      </PopupWithForm>
+      <PopupWithForm
         isActive={isUpdateAvatarActive}
         onClose={closePopups}
-      />
-      <ConfirmDeletePopup
-      />
+        title="Обновить аватар"
+        name="update-avatar"
+        buttonCaption="Сохранить"
+      >
+        <input
+          type="url"
+          name="avatarLink"
+          className="popup__input"
+          id="avatar-url"
+          placeholder="Ссылка на аватар"
+          required />
+
+        <span
+          className="popup__form-error"
+          id="avatar-url-error"></span>
+      </PopupWithForm>
+      <PopupWithForm
+        onClose={closePopups}
+        title="Вы уверены?"
+        name="delete"
+        buttonCaption="Да"
+      >
+
+      </PopupWithForm>
       <ImagePopup
         card={selectedCard}
-        isActive={isImagePopupActive}
         onClose={closePopups}
       />
     </div>
