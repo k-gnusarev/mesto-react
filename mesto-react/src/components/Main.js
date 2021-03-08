@@ -1,6 +1,7 @@
 import React from 'react';
 import avatarButton from '../images/Edit-Avatar-Icon.svg';
 import api from '../utils/Api';
+import Card from './Card';
 
 function Main(props) {
 
@@ -16,6 +17,18 @@ function Main(props) {
         setUserName(res.name);
         setUserDescription(res.about);
         setUserAvatar(res.avatar);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // ЗАГРУЗКА КАРТОЧЕК
+
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then(res => {
+        setCards(res);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -37,6 +50,13 @@ function Main(props) {
         <button type="button" className="button profile__add-button" onClick={props.onAddPlace}></button>
       </section>
       <section className="content">
+        {
+          cards.map(card => (
+              <Card
+                card={card}
+              />
+            ))
+        }
       </section>
     </main>
   );
