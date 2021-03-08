@@ -14,25 +14,26 @@ function App() {
   const [isUpdateAvatarActive, setUpdateAvatarActive] = React.useState(false);
   const [isEditProfileActive, setEditProfileActive] = React.useState(false);
   const [isAddPlaceActive, setAddPlaceActive] = React.useState(false);
+  const [isImagePopupActive, setImagePopupActive] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
 
   // Открытие попапов
-  const handleUpdateAvatarClick = () => {
+  function handleUpdateAvatarClick() {
     setUpdateAvatarActive(true);
   };
 
-  const handleEditProfileClick = () => {
+  function handleEditProfileClick() {
     setEditProfileActive(true);
   };
 
-  const handleAddPlaceClick = () => {
+  function handleAddPlaceClick() {
     setAddPlaceActive(true);
   };
 
-  const handleCardClick = (props) => {
-    setSelectedCard(props);
+  function handleCardClick(card) {
+    setImagePopupActive(true);
+    setSelectedCard(card);
   }
-  // TODO: попап подтверждения удаления
 
   // Закрытие попапов
 
@@ -40,6 +41,7 @@ function App() {
     setUpdateAvatarActive(false);
     setEditProfileActive(false);
     setAddPlaceActive(false);
+    setImagePopupActive(false);
     setSelectedCard(null);
   }
 
@@ -83,7 +85,11 @@ function App() {
       />
       <ConfirmDeletePopup
       />
-
+      <ImagePopup
+        card={selectedCard}
+        isActive={isImagePopupActive}
+        onClose={closePopups}
+      />
     </div>
   );
 }

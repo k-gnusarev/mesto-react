@@ -54,6 +54,8 @@ function Main(props) {
           cards.map(card => (
               <Card
                 card={card}
+                onCardClick={props.onCardClick}
+                key={card._id}
               />
             ))
         }
