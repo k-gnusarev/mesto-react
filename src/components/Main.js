@@ -1,6 +1,6 @@
 import React from 'react';
 import avatarButton from '../images/Edit-Avatar-Icon.svg';
-import api from '../utils/Api';
+import api from '../utils/api';
 import Card from './Card';
 
 function Main(props) {
