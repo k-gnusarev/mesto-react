@@ -21,8 +21,16 @@ function Card(props) {
     `card__like-button ${isLiked ? 'card__like-button_active' : ''}`
   );
 
-  function cardClick () {
+  function cardClick() {
     props.onCardClick(props.card);
+  }
+
+  function cardLike() {
+    props.onCardLike(props.card);
+  }
+
+  function cardDelete() {
+    props.onCardDelete(props.card);
   }
 
   return (
@@ -31,11 +39,11 @@ function Card(props) {
       <div className="card__menu">
         <h2 className="card__title">{props.card.name}</h2>
         <div className="card__like-container">
-          <button type="button" className={`button ${cardLikeButtonClassName}`}></button>
+          <button type="button" className={`button ${cardLikeButtonClassName}`} onClick={cardLike}></button>
           <p className="card__like-counter">{props.card.likes.length}</p>
         </div>
       </div>
-      <button className={`button ${cardDeleteButtonClassName}`}></button>
+      <button className={`button ${cardDeleteButtonClassName}`} onClick={cardDelete}></button>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import avatarButton from '../images/Edit-Avatar-Icon.svg';
-import api from '../utils/api';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -9,18 +8,6 @@ function Main(props) {
   // ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ
 
   const currentUser = React.useContext(CurrentUserContext);
-
-  // ЗАГРУЗКА КАРТОЧЕК
-
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then(res => {
-        setCards(res);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   return (
     <main className="main">
@@ -40,11 +27,13 @@ function Main(props) {
       </section>
       <section className="content">
         {
-          cards.map(card => (
+          props.cards.map(card => (
               <Card
                 card={card}
                 onCardClick={props.onCardClick}
                 key={card._id}
+                onCardLike={props.onCardLike}
+                onCardDelete={props.onCardDelete}
               />
             ))
         }

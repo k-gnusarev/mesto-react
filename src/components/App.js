@@ -68,6 +68,41 @@ function App() {
   },
   [])
 
+    // ЗАГРУЗКА КАРТОЧЕК
+
+    const [cards, setCards] = React.useState([]);
+
+    React.useEffect(() => {
+      api.getInitialCards()
+        .then(res => {
+          setCards(res);
+        })
+        .catch((err) => console.log(err));
+    }, []);
+
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    console.log('---Main: card---');
+    console.log(card);
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    const changeLikeCardStatus = isLiked ? api.removeLike(card._id) : api.setLike(card._id);
+    changeLikeCardStatus.then(updatedCard => {
+      const newCards = cards.map(c => c._id === card._id ? updatedCard : c);
+      setCards(newCards);
+    })
+    .catch((err) => console.log(err));
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then(() => {
+        const newCards = cards.filter(c => c._id !== card._id);
+        setCards(newCards);
+      });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -77,6 +112,9 @@ function App() {
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}
         />}
         <Footer />
         <PopupWithForm
