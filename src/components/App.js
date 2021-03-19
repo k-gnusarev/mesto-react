@@ -7,6 +7,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/api';
+import EditProfilePopup from './EditProfilePopup';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState();
@@ -68,22 +69,20 @@ function App() {
   },
   [])
 
-    // ЗАГРУЗКА КАРТОЧЕК
+  // ЗАГРУЗКА КАРТОЧЕК
 
-    const [cards, setCards] = React.useState([]);
+  const [cards, setCards] = React.useState([]);
 
-    React.useEffect(() => {
-      api.getInitialCards()
-        .then(res => {
-          setCards(res);
-        })
-        .catch((err) => console.log(err));
-    }, []);
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then(res => {
+        setCards(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    console.log('---Main: card---');
-    console.log(card);
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     
     // Отправляем запрос в API и получаем обновлённые данные карточки
@@ -103,6 +102,19 @@ function App() {
       });
   }
 
+  function handleUpdateUser({name, about}) {
+    api.updateUserInfo(name, about)
+      .then(() => {
+        const updatedUser = { ...currentUser };
+        updatedUser.name = name;
+        updatedUser.about = about;
+
+        setCurrentUser({ ...updatedUser });
+        setEditProfileActive(false);
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -117,41 +129,11 @@ function App() {
           cards={cards}
         />}
         <Footer />
-        <PopupWithForm
+        {currentUser && <EditProfilePopup
           isActive={isEditProfileActive}
           onClose={closePopups}
-          title="Редактировать профиль"
-          name="edit"
-          buttonCaption="Сохранить"
-        >
-          <section className="popup__section">
-            <input
-              type="text"
-              name="title"
-              className="popup__input"
-              id="edit-title"
-              placeholder="Имя профиля"
-              required
-              minLength="2"
-              maxLength="40" />
-            <span className="popup__form-error" id="edit-title-error"></span>
-          </section>
-
-          <section className="popup__section">
-            <input
-              type="text"
-              name="subtitle"
-              className="popup__input"
-              id="edit-subtitle"
-              placeholder="Описание профиля"
-              required
-              minLength="2"
-              maxLength="200" />
-
-            <span className="popup__form-error" id="edit-subtitle-error"></span>
-          </section>
-        </PopupWithForm>
-
+          onUpdateUser={handleUpdateUser}
+        />}
         <PopupWithForm
           isActive={isAddPlaceActive}
           onClose={closePopups}
