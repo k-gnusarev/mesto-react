@@ -1,7 +1,7 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddCardPopup(props) {
+function AddPlacePopup(props) {
   const nameInputRef = React.useRef();
   const linkInputRef = React.useRef();
 
@@ -52,4 +52,4 @@ function AddCardPopup(props) {
   );
 }
 
-export default AddCardPopup;
+export default AddPlacePopup;

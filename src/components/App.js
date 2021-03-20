@@ -9,7 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
-import AddCardPopup from './AddCardPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState();
@@ -158,7 +158,7 @@ function App() {
           onClose={closePopups}
           onUpdateUser={handleUpdateUser}
         />}
-        {currentUser && <AddCardPopup
+        {currentUser && <AddPlacePopup
           isActive={isAddPlaceActive}
           onClose={closePopups}
           onAddPlace={handleAddPlace}
