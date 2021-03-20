@@ -9,6 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddCardPopup from './AddCardPopup';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState();
@@ -21,9 +22,7 @@ function App() {
   React.useEffect(() => {
     api.getUserData()
       .then(res => {
-        console.log(res);
         setCurrentUser(res);
-        console.log(currentUser);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -70,7 +69,7 @@ function App() {
   },
   [])
 
-  // ЗАГРУЗКА КАРТОЧЕК
+  // ЗАГРУЗКА И УПРАВЛЕНИЕ КАРТОЧКАМИ
 
   const [cards, setCards] = React.useState([]);
 
@@ -103,6 +102,8 @@ function App() {
       });
   }
 
+  // ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЕ
+
   function handleUpdateUser({name, about}) {
     api.updateUserInfo(name, about)
       .then(() => {
@@ -116,19 +117,33 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  //ОБНОВЛЕНИЕ АВАТАРА
+
   function handleUpdateAvatar({avatar}) {
     api.updateAvatar(avatar)
       .then((updatedUser) => {
         setCurrentUser(updatedUser);
         setUpdateAvatarActive(false);
       })
+      .catch((err) => console.log(err))
+  }
+
+  // ДОБАВЛЕНИЕ НОВОЙ КАРТОЧКИ
+
+  function handleAddPlace({name, link}) {
+    api.sendNewCard(link, name)
+      .then(newCard => {
+        setCards([newCard, ...cards]);
+        setAddPlaceActive(false);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
-        {currentUser && <Main
+        {currentUser && <Main  // "currentUser &&" чтобы компонент загрузился после загрузки контекста
           onUpdateAvatar={handleUpdateAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
@@ -143,49 +158,16 @@ function App() {
           onClose={closePopups}
           onUpdateUser={handleUpdateUser}
         />}
-        <PopupWithForm
+        {currentUser && <AddCardPopup
           isActive={isAddPlaceActive}
           onClose={closePopups}
-          title="Добавить место"
-          name="add"
-          buttonCaption="Сохранить">
-          <section className="popup__section">
-            <input
-              type="text"
-              name="placeName"
-              className="popup__input"
-              id="add-name"
-              placeholder="Название"
-              required
-              minLength="2"
-              maxLength="30" />
-            <span className="popup__form-error" id="add-name-error"></span>
-          </section>
-
-          <section className="popup__section">
-            <input
-              type="url"
-              name="placeLink"
-              className="popup__input"
-              id="add-url"
-              placeholder="Ссылка на картинку"
-              required />
-            <span className="popup__form-error" id="add-url-error"></span>
-          </section>
-        </PopupWithForm>
+          onAddPlace={handleAddPlace}
+        />}
         {currentUser && <EditAvatarPopup
           isActive={isUpdateAvatarActive}
           onClose={closePopups}
           onUpdateAvatar={handleUpdateAvatar}
         />}
-        <PopupWithForm
-          onClose={closePopups}
-          title="Вы уверены?"
-          name="delete"
-          buttonCaption="Да"
-        >
-
-        </PopupWithForm>
         <ImagePopup
           card={selectedCard}
           onClose={closePopups}
