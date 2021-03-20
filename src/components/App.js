@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/api';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState();
@@ -115,6 +116,14 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function handleUpdateAvatar({avatar}) {
+    api.updateAvatar(avatar)
+      .then((updatedUser) => {
+        setCurrentUser(updatedUser);
+        setUpdateAvatarActive(false);
+      })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -164,25 +173,11 @@ function App() {
             <span className="popup__form-error" id="add-url-error"></span>
           </section>
         </PopupWithForm>
-        <PopupWithForm
+        {currentUser && <EditAvatarPopup
           isActive={isUpdateAvatarActive}
           onClose={closePopups}
-          title="Обновить аватар"
-          name="update-avatar"
-          buttonCaption="Сохранить"
-        >
-          <input
-            type="url"
-            name="avatarLink"
-            className="popup__input"
-            id="avatar-url"
-            placeholder="Ссылка на аватар"
-            required />
-
-          <span
-            className="popup__form-error"
-            id="avatar-url-error"></span>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />}
         <PopupWithForm
           onClose={closePopups}
           title="Вы уверены?"
