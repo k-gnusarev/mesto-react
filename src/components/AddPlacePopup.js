@@ -17,9 +17,6 @@ function AddPlacePopup(props) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
 
-    console.log(name);
-    console.log(link);
-
     props.onAddPlace({
       name: name,
       link: link
