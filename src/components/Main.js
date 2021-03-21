@@ -12,9 +12,9 @@ function Main(props) {
   return (
     <main className="main">
       <section className="profile">
-        <div className="profile__avatar-section">
+        <div className="profile__avatar-section" onClick={props.onUpdateAvatar}>
           <img src={currentUser.avatar} alt="Аватар пользователя" className="profile__avatar" />
-          <img src={avatarButton} alt="Поставить другой аватар" className="profile__avatar-button" onClick={props.onUpdateAvatar} />
+          <img src={avatarButton} alt="Поставить другой аватар" className="profile__avatar-button" />
         </div>
         <div className="profile__description">
           <div className="profile__title-container">

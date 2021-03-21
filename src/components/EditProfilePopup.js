@@ -5,15 +5,23 @@ import PopupWithForm from './PopupWithForm';
 function EditProfilePopup(props) {
   const currentUser = useContext(CurrentUserContext);
 
-  const [name, setName] = React.useState();
-  const [description, setDescription] = React.useState();
+  const [name, setName] = React.useState('');
+  const [description, setDescription] = React.useState('');
 
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
   }, [currentUser]);
 
-  function handleSubmit(e) {
+  function handleNameChange(evt) {
+    setName(evt.target.value);
+  }
+  
+  function handleDescriptionChange(evt) {
+    setDescription(evt.target.value);
+  }
+
+    function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
   
@@ -43,7 +51,7 @@ function EditProfilePopup(props) {
           required
           minLength="2"
           maxLength="40"
-          onChange={event => setName(event.target.value)}
+          onChange={handleNameChange}
           value={name} />
         <span className="popup__form-error" id="edit-title-error"></span>
       </section>
@@ -58,7 +66,7 @@ function EditProfilePopup(props) {
           required
           minLength="2"
           maxLength="200"          
-          onChange={event => setDescription(event.target.value)}
+          onChange={handleDescriptionChange}
           value={description} />
 
         <span className="popup__form-error" id="edit-subtitle-error"></span>

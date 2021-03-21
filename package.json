@@ -2,6 +2,8 @@
   "name": "mesto-react",
   "version": "0.1.0",
   "private": true,
+  "author": "Konstantin Gnusarev",
+  "description": "React training project of Yandex.Praktikum webdev course",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
